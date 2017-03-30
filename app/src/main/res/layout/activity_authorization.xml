@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="4">
     tools:context="sis.pewpew.connections.AuthorizationActivity">
 
     <EditText
@@ -11,27 +13,28 @@
         android:layout_width="240dp"
         android:layout_height="40dp"
         android:ems="10"
+        android:gravity="left"
         android:hint="Имя пользователя"
         android:inputType="textPersonName"
-        tools:layout_editor_absoluteY="309dp"
-        app:layout_constraintRight_toLeftOf="@+id/createEmail"
-        android:layout_marginRight="0dp" />
+        tools:layout_editor_absoluteX="72dp"
+        tools:layout_editor_absoluteY="309dp" />
 
-    <EditText
-        android:id="@+id/createEmail"
-        android:layout_width="240dp"
-        android:layout_height="40dp"
-        android:ems="10"
-        android:hint="Адрес электронной почты"
-        android:inputType="textEmailAddress"
-        tools:layout_editor_absoluteY="370dp"
-        app:layout_constraintRight_toLeftOf="@+id/createPassword"
-        android:layout_marginRight="0dp" />
+        <EditText
+            android:id="@+id/createEmail"
+            android:layout_width="240dp"
+            android:layout_height="40dp"
+            android:ems="10"
+            android:gravity="left"
+            android:hint="Адрес электронной почты"
+            android:inputType="textEmailAddress"
+            tools:layout_editor_absoluteX="108dp"
+            tools:layout_editor_absoluteY="374dp" />
 
-    <EditText
+        <EditText
         android:id="@+id/createPassword"
         android:layout_width="240dp"
         android:layout_height="40dp"
+        android:gravity="left"
         android:ems="10"
         android:hint="Пароль"
         android:inputType="textPassword"
@@ -42,7 +45,7 @@
         android:id="@+id/createAccountButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
+        android:gravity="left"
         android:text="Зарегистрироваться"
         tools:layout_editor_absoluteX="42dp"
         tools:layout_editor_absoluteY="501dp" />
@@ -55,4 +58,4 @@
         android:text="Вход"
         tools:layout_editor_absoluteX="236dp"
         tools:layout_editor_absoluteY="501dp" />
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

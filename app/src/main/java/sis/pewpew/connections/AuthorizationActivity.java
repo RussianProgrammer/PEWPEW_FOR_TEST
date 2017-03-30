@@ -16,8 +16,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import sis.pewpew.R;
+import sis.pewpew.utils.BaseActivity;
 
-public class AuthorizationActivity extends AppCompatActivity implements View.OnClickListener {
+public class AuthorizationActivity extends BaseActivity implements View.OnClickListener {
 
         private FirebaseAuth mAuth;
         private FirebaseAuth.AuthStateListener mAuthListener;
@@ -35,6 +36,8 @@ public class AuthorizationActivity extends AppCompatActivity implements View.OnC
         mAuth = FirebaseAuth.getInstance();
         findViewById(R.id.signInButton).setOnClickListener(this);
         findViewById(R.id.createAccountButton).setOnClickListener(this);
+            mEmailField = (EditText) findViewById(R.id.createEmail);
+            mPasswordField = (EditText) findViewById(R.id.createPassword);
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -74,11 +77,14 @@ public class AuthorizationActivity extends AppCompatActivity implements View.OnC
             return;
         }
 
+        showProgressDialog();
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+                        sendEmailVerification();
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
@@ -122,6 +128,32 @@ public class AuthorizationActivity extends AppCompatActivity implements View.OnC
         }*/
 
         return valid;
+    }
+
+    private void sendEmailVerification() {
+        // Disable button
+        // Send verification email
+        // [START send_email_verification]
+        final FirebaseUser user = mAuth.getCurrentUser();
+        user.sendEmailVerification()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        if (task.isSuccessful()) {
+                            Toast.makeText(AuthorizationActivity.this,
+                                    "Verification email sent to " + user.getEmail(),
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.e(TAG, "sendEmailVerification", task.getException());
+                            Toast.makeText(AuthorizationActivity.this,
+                                    "Failed to send verification email.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        // [END_EXCLUDE]
+                    }
+                });
+        // [END send_email_verification]
     }
 
     public void onClick(View v) {

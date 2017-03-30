@@ -1,22 +1,19 @@
 package sis.pewpew.connections;
 
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
 import sis.pewpew.R;
 
-public class SignInActivity extends AppCompatActivity {
+public class SignInActivity extends AuthorizationActivity {
 
     AuthorizationActivity auth = new AuthorizationActivity();
 
@@ -70,6 +67,8 @@ public class SignInActivity extends AppCompatActivity {
             return;
         }
 
+        showProgressDialog();
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -89,6 +88,7 @@ public class SignInActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
     public void onClick(View v) {
         int i = v.getId();
