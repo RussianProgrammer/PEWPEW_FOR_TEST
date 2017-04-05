@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -20,8 +19,8 @@ public class SignInActivity extends AuthorizationActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private static final String TAG = "Login";
-    private EditText mEmailField;
-    private EditText mPasswordField;
+    //private EditText mEmailField;
+    //private EditText mPasswordField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

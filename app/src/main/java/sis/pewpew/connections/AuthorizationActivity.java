@@ -2,7 +2,6 @@ package sis.pewpew.connections;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,19 +12,22 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
-
+import sis.pewpew.MainActivity;
 import sis.pewpew.R;
-import sis.pewpew.utils.BaseActivity;
+import sis.pewpew.utils.ProgressDialogActivity;
 
-public class AuthorizationActivity extends BaseActivity implements View.OnClickListener {
+public class AuthorizationActivity extends ProgressDialogActivity implements View.OnClickListener {
 
         private FirebaseAuth mAuth;
         private FirebaseAuth.AuthStateListener mAuthListener;
         private static final String TAG = "Login";
-        private EditText mEmailField;
-        private EditText mPasswordField;
-        private EditText mNicknameField;
+        protected EditText mEmailField;
+        protected EditText mPasswordField;
+        //private EditText mNicknameField;
 
 
         @Override
@@ -51,10 +53,9 @@ public class AuthorizationActivity extends BaseActivity implements View.OnClickL
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
+                updateUI(user);
             }
         };
-        // ...
     }
 
         @Override
@@ -71,6 +72,31 @@ public class AuthorizationActivity extends BaseActivity implements View.OnClickL
         }
     }
 
+    private void sendEmailVerification() {
+
+        final FirebaseUser user = mAuth.getCurrentUser();
+        //Maybe
+        assert user != null;
+        //Maybe
+        user.sendEmailVerification()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        if (task.isSuccessful()) {
+                            Toast.makeText(AuthorizationActivity.this,
+                                    "Verification email sent to " + user.getEmail(),
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.e(TAG, "sendEmailVerification", task.getException());
+                            Toast.makeText(AuthorizationActivity.this,
+                                    "Failed to send verification email.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
     private void createAccount(String email, String password) {
         Log.d(TAG, "createAccount:" + email);
         if (!validateForm()) {
@@ -84,21 +110,28 @@ public class AuthorizationActivity extends BaseActivity implements View.OnClickL
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-                        sendEmailVerification();
 
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
+                        hideProgressDialog();
+
                         if (!task.isSuccessful()) {
-                            Toast.makeText(AuthorizationActivity.this, "Ошибка входа",
-                                    Toast.LENGTH_SHORT).show();
+                            try {
+                                throw task.getException();
+                            } catch(FirebaseAuthWeakPasswordException e) {
+                                mPasswordField.setError("Ваш пароль слишком слаб");
+                                mPasswordField.requestFocus();
+                            } catch(FirebaseAuthInvalidCredentialsException e) {
+                                mEmailField.setError("Пожалуйста, проверьте корректность предоставленных данных");
+                                mEmailField.requestFocus();
+                            } catch(FirebaseAuthUserCollisionException e) {
+                                mEmailField.setError("Пользователь с таким email уже существует");
+                                mEmailField.requestFocus();
+                            } catch(Exception e) {
+                                Log.e(TAG, e.getMessage());
+                            }
                         }
-
-                        // ...
                     }
                 });
     }
-
 
     protected boolean validateForm() {
         boolean valid = true;
@@ -115,6 +148,9 @@ public class AuthorizationActivity extends BaseActivity implements View.OnClickL
         if (TextUtils.isEmpty(password)) {
             mPasswordField.setError("Необходим пароль");
             valid = false;
+        } else if (TextUtils.isDigitsOnly(password)) {
+            mPasswordField.setError("Пароль должен содержать буквы");
+            valid = false;
         } else {
             mPasswordField.setError(null);
         }
@@ -130,30 +166,14 @@ public class AuthorizationActivity extends BaseActivity implements View.OnClickL
         return valid;
     }
 
-    private void sendEmailVerification() {
-        // Disable button
-        // Send verification email
-        // [START send_email_verification]
-        final FirebaseUser user = mAuth.getCurrentUser();
-        user.sendEmailVerification()
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                        if (task.isSuccessful()) {
-                            Toast.makeText(AuthorizationActivity.this,
-                                    "Verification email sent to " + user.getEmail(),
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.e(TAG, "sendEmailVerification", task.getException());
-                            Toast.makeText(AuthorizationActivity.this,
-                                    "Failed to send verification email.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        // [END_EXCLUDE]
-                    }
-                });
-        // [END send_email_verification]
+    private void updateUI(FirebaseUser user) {
+        hideProgressDialog();
+        if (user != null) {
+            sendEmailVerification();
+            Intent intent = new Intent(AuthorizationActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     public void onClick(View v) {

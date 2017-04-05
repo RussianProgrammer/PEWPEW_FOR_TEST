@@ -27,7 +27,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".connections.AuthorizationActivity" />
         <activity android:name=".connections.SignInActivity" />
-        <activity android:name=".utils.BaseActivity"></activity>
+        <activity android:name=".utils.BaseActivity" />
+        <activity android:name=".WelcomeActivity"></activity>
     </application>
 
 </manifest>
