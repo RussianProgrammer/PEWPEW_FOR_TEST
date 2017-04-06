@@ -10,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
 import sis.pewpew.fragments.AboutFragment;
 import sis.pewpew.fragments.AchievementsFragment;
 import sis.pewpew.fragments.FeedbackFragment;
@@ -34,7 +37,6 @@ public class MainActivity extends AppCompatActivity
     ShareFragment shareFragment;
     TrainingFragment trainingFragment;
     AboutFragment aboutFragment;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +133,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
         public void setActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);
     }

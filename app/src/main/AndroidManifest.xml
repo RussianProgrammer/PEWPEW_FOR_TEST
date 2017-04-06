@@ -7,7 +7,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:fullBackupContent="@xml/backup_descriptor">
         <activity
             android:name=".utils.SplashActivity"
             android:theme="@style/SplashTheme">
@@ -27,7 +28,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".connections.AuthorizationActivity" />
         <activity android:name=".connections.SignInActivity" />
-        <activity android:name=".utils.BaseActivity" />
+        <activity android:name=".utils.ProgressDialogActivity" />
         <activity android:name=".WelcomeActivity"></activity>
     </application>
 

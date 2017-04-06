@@ -36,7 +36,7 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
         setContentView(R.layout.activity_authorization);
 
         mAuth = FirebaseAuth.getInstance();
-        findViewById(R.id.signInButton).setOnClickListener(this);
+        findViewById(R.id.signInActivityButton).setOnClickListener(this);
         findViewById(R.id.createAccountButton).setOnClickListener(this);
             mEmailField = (EditText) findViewById(R.id.createEmail);
             mPasswordField = (EditText) findViewById(R.id.createPassword);
@@ -110,14 +110,12 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-
-                        hideProgressDialog();
-
+                        ///////////////
                         if (!task.isSuccessful()) {
                             try {
                                 throw task.getException();
                             } catch(FirebaseAuthWeakPasswordException e) {
-                                mPasswordField.setError("Ваш пароль слишком слаб");
+                                mPasswordField.setError("Пароль должен содержать не менее 6 символов");
                                 mPasswordField.requestFocus();
                             } catch(FirebaseAuthInvalidCredentialsException e) {
                                 mEmailField.setError("Пожалуйста, проверьте корректность предоставленных данных");
@@ -129,6 +127,7 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
                                 Log.e(TAG, e.getMessage());
                             }
                         }
+                        hideProgressDialog();
                     }
                 });
     }
@@ -180,7 +179,7 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
         int i = v.getId();
         if (i == R.id.createAccountButton) {
             createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
-        } else if (i == R.id.signInButton) {
+        } else if (i == R.id.signInActivityButton) {
             Intent intent = new Intent(AuthorizationActivity.this, SignInActivity.class);
             startActivity(intent);
         }
