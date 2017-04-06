@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.app.Fragment;
 
+import sis.pewpew.MainActivity;
 import sis.pewpew.R;
 
 /**
@@ -64,6 +65,7 @@ public class MapFragment extends android.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.map_fragment_name));
         return inflater.inflate(R.layout.fragment_map, container, false);
     }
 

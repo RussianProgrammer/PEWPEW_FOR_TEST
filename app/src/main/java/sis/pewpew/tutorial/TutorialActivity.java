@@ -13,15 +13,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import sis.pewpew.MainActivity;
 import sis.pewpew.R;
 import sis.pewpew.connections.AuthorizationActivity;
 
 public class TutorialActivity extends AppCompatActivity {
-
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,22 +34,19 @@ public class TutorialActivity extends AppCompatActivity {
         } else {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("activity_executed", true);
-            editor.commit();
+            editor.apply();
         }
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     public static class PlaceholderFragment extends Fragment {
@@ -69,14 +64,13 @@ public class TutorialActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.tutorial_fragment_1, container, false);
-            return rootView;
+            return inflater.inflate(R.layout.tutorial_fragment_1, container, false);
         }
     }
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

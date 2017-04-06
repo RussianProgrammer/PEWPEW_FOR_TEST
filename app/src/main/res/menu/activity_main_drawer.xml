@@ -5,47 +5,47 @@
         <item
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_menu_map"
-            android:title="Карта" />
+            android:title="@string/map_fragment_name" />
         <item
             android:id="@+id/nav_progress"
             android:icon="@drawable/ic_menu_progress"
-            android:title="Прогресс" />
+            android:title="@string/progress_fragment_name" />
         <item
             android:id="@+id/nav_rating"
             android:icon="@drawable/ic_menu_rating"
-            android:title="Рейтинг" />
+            android:title="@string/rating_fragment_name" />
         <item
             android:id="@+id/nav_achievements"
             android:icon="@drawable/ic_menu_achievements"
-            android:title="Достижения" />
+            android:title="@string/achievements_fragment_name" />
         <item
             android:id="@+id/nav_training"
             android:icon="@drawable/ic_menu_training"
-            android:title="Обучение" />
+            android:title="@string/training_fragment_name" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_menu_settings"
-            android:title="Настройки" />
+            android:title="@string/settings_fragment_name" />
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_menu_about"
-            android:title="О приложении" />
+            android:title="@string/about_fragment_name" />
     </group>
 
-    <item android:title="Обратная связь">
+    <item android:title="@string/feedback_header_name">
         <menu>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Поделиться" />
+                android:title="@string/share_fragment_name" />
             <item
                 android:id="@+id/nav_feedback"
                 android:icon="@drawable/ic_menu_feedback"
-                android:title="Отправить отзыв" />
+                android:title="@string/feedback_fragment_name" />
             <item
                 android:id="@+id/nav_gratitude"
                 android:icon="@drawable/ic_menu_gratitude"
-                android:title="Особая благодарность" />
+                android:title="@string/gratitude_fragment_name" />
         </menu>
     </item>
 
