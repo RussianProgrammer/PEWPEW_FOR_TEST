@@ -9,8 +9,11 @@ import android.view.View;
 import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import sis.pewpew.R;
 
@@ -21,8 +24,8 @@ public class NetIntegrationActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private static final String TAG = "Login";
     public FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    public String name = mDataBase.child("users").child("userInfo").child(user.getUid()).child("username").toString();
-    public String email = mDataBase.child("users").child("userInfo").child(user.getUid()).child("email").toString();
+    public NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+    public View headerView = navigationView.getHeaderView(0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,34 @@ public class NetIntegrationActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDataBase = FirebaseDatabase.getInstance().getReference();
 
+        mDataBase.child("users").child("userInfo").child(user.getUid()).child("username")
+                .addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                String username = snapshot.getValue().toString();
+                TextView navUserName = (TextView) headerView.findViewById(R.id.user_display_name);
+                navUserName.setText(username);
+            }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                    }
+        });
+
+        mDataBase.child("users").child("userInfo").child(user.getUid()).child("email")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        String email = snapshot.getValue().toString();
+                        TextView navUserEmail = (TextView) headerView.findViewById(R.id.user_email);
+                        navUserEmail.setText(email);
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                    }
+                });
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -38,12 +69,12 @@ public class NetIntegrationActivity extends AppCompatActivity {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
 
-                    NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                    /*NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
                     View headerView = navigationView.getHeaderView(0);
                     TextView navUserName = (TextView) headerView.findViewById(R.id.user_display_name);
-                    navUserName.setText(name);
+                    navUserName.setText(username);
                     TextView navUserEmail = (TextView) headerView.findViewById(R.id.user_email);
-                    navUserEmail.setText(email);
+                    navUserEmail.setText(email);*/
 
                 } else {
                     // User is signed out
