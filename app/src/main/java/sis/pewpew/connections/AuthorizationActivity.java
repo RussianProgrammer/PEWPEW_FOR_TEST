@@ -17,7 +17,6 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-
 import sis.pewpew.MainActivity;
 import sis.pewpew.R;
 import sis.pewpew.utils.ProgressDialogActivity;
@@ -84,11 +83,8 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
     }
 
     private void sendEmailVerification() {
-
         final FirebaseUser user = mAuth.getCurrentUser();
-        //Maybe
         assert user != null;
-        //Maybe
         user.sendEmailVerification()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
@@ -163,6 +159,17 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
             valid = false;
         } else {
             mPasswordField.setError(null);
+        }
+
+        String name = mNicknameField.getText().toString();
+        if (TextUtils.isEmpty(name)) {
+            mNicknameField.setError("Необходимо имя пользователя");
+            valid = false;
+        } else if (TextUtils.isDigitsOnly(name)) {
+            mNicknameField.setError("Имя пользователя должно содержать буквы");
+            valid = false;
+        } else {
+            mEmailField.setError(null);
         }
         return valid;
     }
