@@ -16,6 +16,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+
 import sis.pewpew.MainActivity;
 import sis.pewpew.R;
 import sis.pewpew.utils.ProgressDialogActivity;
@@ -27,7 +29,7 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
         private static final String TAG = "Login";
         protected EditText mEmailField;
         protected EditText mPasswordField;
-        //private EditText mNicknameField;
+        protected EditText mNicknameField;
 
 
         @Override
@@ -40,6 +42,7 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
         findViewById(R.id.createAccountButton).setOnClickListener(this);
             mEmailField = (EditText) findViewById(R.id.createEmail);
             mPasswordField = (EditText) findViewById(R.id.createPassword);
+            mNicknameField = (EditText) findViewById(R.id.createNickname);
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -47,8 +50,10 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(mNicknameField.getText().toString()).build();
+                    user.updateProfile(profileUpdates);
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -61,6 +66,12 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
         @Override
         public void onStart() {
         super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+        @Override
+        public void onResume() {
+        super.onResume();
         mAuth.addAuthStateListener(mAuthListener);
     }
 
@@ -85,12 +96,12 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
 
                         if (task.isSuccessful()) {
                             Toast.makeText(AuthorizationActivity.this,
-                                    "Verification email sent to " + user.getEmail(),
+                                    "Email подтверждения отправлен на " + user.getEmail(),
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             Log.e(TAG, "sendEmailVerification", task.getException());
                             Toast.makeText(AuthorizationActivity.this,
-                                    "Failed to send verification email.",
+                                    "Ошибка отправки email подтверждения",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -110,12 +121,12 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-                        ///////////////
+
                         if (!task.isSuccessful()) {
                             try {
                                 throw task.getException();
                             } catch(FirebaseAuthWeakPasswordException e) {
-                                mPasswordField.setError("Пароль должен содержать не менее 6 символов");
+                                mPasswordField.setError("Ваш пароль слишком слаб");
                                 mPasswordField.requestFocus();
                             } catch(FirebaseAuthInvalidCredentialsException e) {
                                 mEmailField.setError("Пожалуйста, проверьте корректность предоставленных данных");
@@ -153,15 +164,6 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
         } else {
             mPasswordField.setError(null);
         }
-
-        /*String nickname = mNicknameField.getText().toString();
-        if (TextUtils.isEmpty(email)) {
-            mNicknameField.setError("Необходимо имя пользователя");
-            valid = false;
-        } else {
-            mNicknameField.setError(null);
-        }*/
-
         return valid;
     }
 

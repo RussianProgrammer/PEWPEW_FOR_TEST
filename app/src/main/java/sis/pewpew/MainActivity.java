@@ -6,13 +6,9 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-
 import sis.pewpew.fragments.AboutFragment;
 import sis.pewpew.fragments.AchievementsFragment;
 import sis.pewpew.fragments.FeedbackFragment;
@@ -23,8 +19,9 @@ import sis.pewpew.fragments.RatingFragment;
 import sis.pewpew.fragments.SettingsFragment;
 import sis.pewpew.fragments.ShareFragment;
 import sis.pewpew.fragments.TrainingFragment;
+import sis.pewpew.utils.NetIntegrationActivity;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends NetIntegrationActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     AchievementsFragment achievementsFragment;
@@ -134,6 +131,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
         public void setActionBarTitle(String title) {
-        getSupportActionBar().setTitle(title);
+                getSupportActionBar().setTitle(title);
     }
 }
