@@ -17,6 +17,9 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import sis.pewpew.MainActivity;
 import sis.pewpew.R;
 import sis.pewpew.utils.ProgressDialogActivity;
@@ -24,11 +27,12 @@ import sis.pewpew.utils.ProgressDialogActivity;
 public class AuthorizationActivity extends ProgressDialogActivity implements View.OnClickListener {
 
         private FirebaseAuth mAuth;
+        private DatabaseReference mDataBase;
         private FirebaseAuth.AuthStateListener mAuthListener;
         private static final String TAG = "Login";
         protected EditText mEmailField;
         protected EditText mPasswordField;
-        protected EditText mNicknameField;
+        protected EditText mUsernameField;
 
 
         @Override
@@ -36,12 +40,13 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authorization);
 
-        mAuth = FirebaseAuth.getInstance();
-        findViewById(R.id.signInActivityButton).setOnClickListener(this);
-        findViewById(R.id.createAccountButton).setOnClickListener(this);
+            mAuth = FirebaseAuth.getInstance();
+            mDataBase = FirebaseDatabase.getInstance().getReference();
+            findViewById(R.id.signInActivityButton).setOnClickListener(this);
+            findViewById(R.id.createAccountButton).setOnClickListener(this);
             mEmailField = (EditText) findViewById(R.id.createEmail);
             mPasswordField = (EditText) findViewById(R.id.createPassword);
-            mNicknameField = (EditText) findViewById(R.id.createNickname);
+            mUsernameField = (EditText) findViewById(R.id.createNickname);
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -50,9 +55,24 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+
+                    mDataBase.child("users").child("userInfo").child(user.getUid()).child("username")
+                            .setValue(mUsernameField.getText().toString());
+                    mDataBase.child("users").child("userInfo").child(user.getUid()).child("email")
+                            .setValue(mEmailField.getText().toString());
+
+
+                    /*UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                             .setDisplayName(mNicknameField.getText().toString()).build();
-                    user.updateProfile(profileUpdates);
+                    user.updateProfile(profileUpdates)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d(TAG, "Username is set");
+                                    }
+                                }
+                            });*/
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -161,15 +181,15 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
             mPasswordField.setError(null);
         }
 
-        String name = mNicknameField.getText().toString();
+        String name = mUsernameField.getText().toString();
         if (TextUtils.isEmpty(name)) {
-            mNicknameField.setError("Необходимо имя пользователя");
+            mUsernameField.setError("Необходимо имя пользователя");
             valid = false;
         } else if (TextUtils.isDigitsOnly(name)) {
-            mNicknameField.setError("Имя пользователя должно содержать буквы");
+            mUsernameField.setError("Имя пользователя должно содержать буквы");
             valid = false;
         } else {
-            mEmailField.setError(null);
+            mUsernameField.setError(null);
         }
         return valid;
     }
