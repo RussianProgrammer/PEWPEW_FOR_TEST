@@ -18,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import sis.pewpew.MainActivity;
 import sis.pewpew.R;
 import sis.pewpew.utils.ProgressDialogActivity;
@@ -59,19 +58,6 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
                             .setValue(mUsernameField.getText().toString());
                     mDataBase.child("users").child("userInfo").child(user.getUid()).child("email")
                             .setValue(mEmailField.getText().toString());
-
-
-                    /*UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                            .setDisplayName(mNicknameField.getText().toString()).build();
-                    user.updateProfile(profileUpdates)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Log.d(TAG, "Username is set");
-                                    }
-                                }
-                            });*/
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");

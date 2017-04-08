@@ -97,8 +97,7 @@ public class SignInActivity extends ProgressDialogActivity implements View.OnCli
                     }
                 });
     }
-/////////////////////////////////////////////
-    ////////////////////
+
     protected boolean validateForm() {
         boolean valid = true;
 

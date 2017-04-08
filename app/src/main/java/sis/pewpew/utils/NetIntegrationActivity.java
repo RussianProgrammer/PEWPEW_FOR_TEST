@@ -23,8 +23,7 @@ public class NetIntegrationActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private static final String TAG = "Login";
     public FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    public NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-    public View headerView = navigationView.getHeaderView(0);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +37,17 @@ public class NetIntegrationActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 String username = snapshot.getValue().toString();
+
+                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                View headerView = navigationView.getHeaderView(0);
                 TextView navUserName = (TextView) headerView.findViewById(R.id.user_display_name);
                 navUserName.setText(username);
             }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
+                        // Getting Post failed, log a message
                         Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                        // ...
                     }
         });
 
@@ -52,12 +56,18 @@ public class NetIntegrationActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         String email = snapshot.getValue().toString();
+
+                        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                        View headerView = navigationView.getHeaderView(0);
                         TextView navUserEmail = (TextView) headerView.findViewById(R.id.user_email);
                         navUserEmail.setText(email);
+
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
+                        // Getting Post failed, log a message
                         Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                        // ...
                     }
                 });
 
@@ -67,14 +77,6 @@ public class NetIntegrationActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-
-                    /*NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-                    View headerView = navigationView.getHeaderView(0);
-                    TextView navUserName = (TextView) headerView.findViewById(R.id.user_display_name);
-                    navUserName.setText(username);
-                    TextView navUserEmail = (TextView) headerView.findViewById(R.id.user_email);
-                    navUserEmail.setText(email);*/
-
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
