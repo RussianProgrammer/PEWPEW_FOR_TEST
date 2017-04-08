@@ -20,7 +20,6 @@ import sis.pewpew.R;
 public class NetIntegrationActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private DatabaseReference mDataBase;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private static final String TAG = "Login";
     public FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -32,7 +31,7 @@ public class NetIntegrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
-        mDataBase = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mDataBase = FirebaseDatabase.getInstance().getReference();
 
         mDataBase.child("users").child("userInfo").child(user.getUid()).child("username")
                 .addValueEventListener(new ValueEventListener() {
