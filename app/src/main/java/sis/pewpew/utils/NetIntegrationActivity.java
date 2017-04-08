@@ -24,7 +24,6 @@ public class NetIntegrationActivity extends AppCompatActivity {
     private static final String TAG = "Login";
     public FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

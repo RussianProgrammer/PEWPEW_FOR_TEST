@@ -74,12 +74,6 @@ public class AuthorizationActivity extends ProgressDialogActivity implements Vie
     }
 
         @Override
-        public void onResume() {
-        super.onResume();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-
-        @Override
         public void onStop() {
         super.onStop();
         if (mAuthListener != null) {
