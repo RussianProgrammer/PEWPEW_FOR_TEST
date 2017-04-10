@@ -27,4 +27,5 @@
     <string name="email_sending_error_message">Ошибка отправки email подтверждения</string>
     <string name="authentication_error_message">Ошибка аутентификации</string>
     <string name="google_play_services_error_message">Произошла ошибка сервисов Google Play</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

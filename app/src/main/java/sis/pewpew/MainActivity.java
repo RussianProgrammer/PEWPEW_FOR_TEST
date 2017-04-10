@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import sis.pewpew.fragments.AboutFragment;
 import sis.pewpew.fragments.AchievementsFragment;
 import sis.pewpew.fragments.EventsFragment;
@@ -114,7 +115,7 @@ public class MainActivity extends NetIntegrationActivity
             fragmentTransaction.replace(R.id.container, ratingFragment);
         } else if (id == R.id.nav_achievements) {
             fragmentTransaction.replace(R.id.container, achievementsFragment);
-        }else if (id == R.id.nav_events) {
+        } else if (id == R.id.nav_events) {
                 fragmentTransaction.replace(R.id.container, eventsFragment);
         } else if (id == R.id.nav_training) {
             fragmentTransaction.replace(R.id.container, trainingFragment);
