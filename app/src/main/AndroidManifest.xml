@@ -30,7 +30,8 @@
         <activity android:name=".connections.SignInActivity" />
         <activity android:name=".utils.ProgressDialogActivity" />
         <activity android:name=".WelcomeActivity" />
-        <activity android:name=".connections.SettingDisplayNameActivity"></activity>
+        <activity android:name=".connections.SettingDisplayNameActivity" />
+        <activity android:name=".connections.GoogleAuthActivity" />
     </application>
 
 </manifest>

@@ -13,9 +13,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
 import sis.pewpew.MainActivity;
 import sis.pewpew.R;
-import sis.pewpew.connections.AuthorizationActivity;
+import sis.pewpew.connections.GoogleAuthActivity;
 
 public class TutorialActivity extends AppCompatActivity {
 
@@ -91,7 +92,8 @@ public class TutorialActivity extends AppCompatActivity {
     }
 
     public void finishTutorial(View view) {
-        Intent intent = new Intent(TutorialActivity.this, AuthorizationActivity.class);
+        Intent intent = new Intent(TutorialActivity.this, GoogleAuthActivity.class);
         startActivity(intent);
+        finish();
     }
 }

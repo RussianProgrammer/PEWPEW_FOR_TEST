@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 
+import sis.pewpew.R;
+
 public class ProgressDialogActivity extends AppCompatActivity {
 
     @VisibleForTesting
@@ -12,7 +14,7 @@ public class ProgressDialogActivity extends AppCompatActivity {
     public void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage("Подождите!!!");
+            mProgressDialog.setMessage(getString(R.string.progress_dialog_message));
             mProgressDialog.setIndeterminate(true);
         }
 
