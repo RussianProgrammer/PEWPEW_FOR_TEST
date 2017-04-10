@@ -19,6 +19,10 @@
             android:icon="@drawable/ic_menu_achievements"
             android:title="@string/achievements_fragment_name" />
         <item
+            android:id="@+id/nav_events"
+            android:icon="@drawable/ic_menu_events"
+            android:title="@string/events_fragment_name" />
+        <item
             android:id="@+id/nav_training"
             android:icon="@drawable/ic_menu_training"
             android:title="@string/training_fragment_name" />

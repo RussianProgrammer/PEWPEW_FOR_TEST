@@ -92,12 +92,12 @@ public class GoogleAuthActivity extends ProgressDialogActivity implements
 
                         if (task.isSuccessful()) {
                             Toast.makeText(GoogleAuthActivity.this,
-                                    "Email подтверждения отправлен на " + user.getEmail(),
+                                    getString(R.string.email_sending_message) + user.getEmail(),
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             Log.e(TAG, "sendEmailVerification", task.getException());
                             Toast.makeText(GoogleAuthActivity.this,
-                                    "Ошибка отправки email подтверждения",
+                                    R.string.email_sending_error_message,
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -130,7 +130,7 @@ public class GoogleAuthActivity extends ProgressDialogActivity implements
                         Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithCredential", task.getException());
-                            Toast.makeText(GoogleAuthActivity.this, "Ошибка аутентификации",
+                            Toast.makeText(GoogleAuthActivity.this, R.string.authentication_error_message,
                                     Toast.LENGTH_SHORT).show();
                         }
                         hideProgressDialog();
@@ -156,7 +156,7 @@ public class GoogleAuthActivity extends ProgressDialogActivity implements
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
-        Toast.makeText(this, "Произошла ошибка сервисов Google Play", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.google_play_services_error_message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

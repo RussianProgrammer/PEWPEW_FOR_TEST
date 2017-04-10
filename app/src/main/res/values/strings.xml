@@ -14,6 +14,7 @@
     <string name="progress_fragment_name">Прогресс</string>
     <string name="rating_fragment_name">Рейтинг</string>
     <string name="achievements_fragment_name">Достижения</string>
+    <string name="events_fragment_name">События</string>
     <string name="training_fragment_name">Обучение</string>
     <string name="settings_fragment_name">Настройки</string>
     <string name="about_fragment_name">О приложении</string>
@@ -22,4 +23,8 @@
     <string name="feedback_fragment_name">Отправить отзыв</string>
     <string name="gratitude_fragment_name">Особая благодарность</string>
     <string name="progress_dialog_message">Подождите…</string>
+    <string name="email_sending_message">Email подтверждения отправлен на</string>
+    <string name="email_sending_error_message">Ошибка отправки email подтверждения</string>
+    <string name="authentication_error_message">Ошибка аутентификации</string>
+    <string name="google_play_services_error_message">Произошла ошибка сервисов Google Play</string>
 </resources>

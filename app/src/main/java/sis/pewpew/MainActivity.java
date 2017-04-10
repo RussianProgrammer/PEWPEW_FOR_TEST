@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import sis.pewpew.fragments.AboutFragment;
 import sis.pewpew.fragments.AchievementsFragment;
+import sis.pewpew.fragments.EventsFragment;
 import sis.pewpew.fragments.FeedbackFragment;
 import sis.pewpew.fragments.GratitudeFragment;
 import sis.pewpew.fragments.MapFragment;
@@ -28,6 +29,7 @@ public class MainActivity extends NetIntegrationActivity
     FeedbackFragment feedbackFragment;
     GratitudeFragment gratitudeFragment;
     MapFragment mapFragment;
+    EventsFragment eventsFragment;
     ProgressFragment progressFragment;
     RatingFragment ratingFragment;
     SettingsFragment settingsFragment;
@@ -52,6 +54,7 @@ public class MainActivity extends NetIntegrationActivity
         settingsFragment = new SettingsFragment();
         shareFragment = new ShareFragment();
         trainingFragment = new TrainingFragment();
+        eventsFragment = new EventsFragment();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -111,6 +114,8 @@ public class MainActivity extends NetIntegrationActivity
             fragmentTransaction.replace(R.id.container, ratingFragment);
         } else if (id == R.id.nav_achievements) {
             fragmentTransaction.replace(R.id.container, achievementsFragment);
+        }else if (id == R.id.nav_events) {
+                fragmentTransaction.replace(R.id.container, eventsFragment);
         } else if (id == R.id.nav_training) {
             fragmentTransaction.replace(R.id.container, trainingFragment);
         } else if (id == R.id.nav_settings) {
