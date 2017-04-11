@@ -15,17 +15,16 @@
         tools:text="FIFTH TEXT" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/request_permission_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:layout_marginBottom="15dp"
         android:layout_marginEnd="30dp"
         android:layout_marginLeft="30dp"
         android:layout_marginStart="30dp"
-        android:layout_gravity="bottom"
         android:elevation="5dp"
         android:onClick="finishTutorial"
-        android:text="Start"
-        tools:text="Начнем!" />
+        android:text="@string/grant_access_button_text" />
 
 </FrameLayout>
