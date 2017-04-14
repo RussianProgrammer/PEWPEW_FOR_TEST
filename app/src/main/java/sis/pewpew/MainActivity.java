@@ -1,14 +1,18 @@
 package sis.pewpew;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import sis.pewpew.fragments.AboutFragment;
 import sis.pewpew.fragments.AchievementsFragment;
 import sis.pewpew.fragments.EventsFragment;
@@ -24,6 +28,9 @@ import sis.pewpew.utils.NetIntegrationActivity;
 
 public class MainActivity extends NetIntegrationActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private final int PERMISSION_REQUEST_CODE = 5;
+    public boolean mLocationPermissionGranted;
 
     AchievementsFragment achievementsFragment;
     FeedbackFragment feedbackFragment;
@@ -43,6 +50,17 @@ public class MainActivity extends NetIntegrationActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true;
+
+        } else {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSION_REQUEST_CODE);
+        }
 
         aboutFragment = new AboutFragment();
         achievementsFragment = new AchievementsFragment();
@@ -101,7 +119,6 @@ public class MainActivity extends NetIntegrationActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         android.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -115,7 +132,7 @@ public class MainActivity extends NetIntegrationActivity
         } else if (id == R.id.nav_achievements) {
             fragmentTransaction.replace(R.id.container, achievementsFragment);
         } else if (id == R.id.nav_events) {
-                fragmentTransaction.replace(R.id.container, eventsFragment);
+            fragmentTransaction.replace(R.id.container, eventsFragment);
         } else if (id == R.id.nav_training) {
             fragmentTransaction.replace(R.id.container, trainingFragment);
         } else if (id == R.id.nav_settings) {
@@ -135,7 +152,8 @@ public class MainActivity extends NetIntegrationActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-        public void setActionBarTitle(String title) {
-                getSupportActionBar().setTitle(title);
+
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
 }

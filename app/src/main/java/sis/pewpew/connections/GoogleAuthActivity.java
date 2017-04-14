@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -19,6 +20,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import sis.pewpew.MainActivity;
 import sis.pewpew.R;
 import sis.pewpew.utils.ProgressDialogActivity;
@@ -32,13 +36,14 @@ public class GoogleAuthActivity extends ProgressDialogActivity implements
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private GoogleApiClient mGoogleApiClient;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_auth);
-
         findViewById(R.id.sign_in_button).setOnClickListener(this);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -57,10 +62,8 @@ public class GoogleAuthActivity extends ProgressDialogActivity implements
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
-
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
                 updateUI(user);
@@ -91,8 +94,7 @@ public class GoogleAuthActivity extends ProgressDialogActivity implements
                     public void onComplete(@NonNull Task<Void> task) {
 
                         if (task.isSuccessful()) {
-                            Toast.makeText(GoogleAuthActivity.this,
-                                    getString(R.string.email_sending_message) + user.getEmail(),
+                            Toast.makeText(GoogleAuthActivity.this, "Email подтверждения отправлен на " + user.getEmail(),
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             Log.e(TAG, "sendEmailVerification", task.getException());
@@ -146,7 +148,11 @@ public class GoogleAuthActivity extends ProgressDialogActivity implements
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();
         if (user != null) {
-            sendEmailVerification();
+            if (!user.isEmailVerified()) {
+                sendEmailVerification();
+            }
+            mDatabase.child("users").child(user.getUid()).child("name").setValue(user.getDisplayName());
+            mDatabase.child("users").child(user.getUid()).child("email").setValue(user.getEmail());
             Intent intent = new Intent(GoogleAuthActivity.this, MainActivity.class);
             startActivity(intent);
             finish();

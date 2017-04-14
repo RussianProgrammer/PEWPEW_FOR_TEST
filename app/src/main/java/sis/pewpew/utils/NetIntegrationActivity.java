@@ -1,11 +1,14 @@
 package sis.pewpew.utils;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -14,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import sis.pewpew.R;
+import sis.pewpew.connections.GoogleAuthActivity;
 
 public class NetIntegrationActivity extends AppCompatActivity {
 
@@ -23,6 +27,7 @@ public class NetIntegrationActivity extends AppCompatActivity {
     public FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     public String username = user.getDisplayName();
     public String email = user.getEmail();
+    public Uri photo = user.getPhotoUrl();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,44 +36,11 @@ public class NetIntegrationActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         DatabaseReference mDataBase = FirebaseDatabase.getInstance().getReference();
 
-        /*mDataBase.child("users").child(user.getUid()).child("username")
-                .addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                String username = snapshot.getValue().toString();
-
-                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-                View headerView = navigationView.getHeaderView(0);
-                TextView navUserName = (TextView) headerView.findViewById(R.id.user_display_name);
-                navUserName.setText(username);
-            }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Getting Post failed, log a message
-                        Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                        // ...
-                    }
-        });
-
-        /*mDataBase.child("users").child(user.getUid()).child("email")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot snapshot) {
-                        String email = snapshot.getValue().toString();
-
-                        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-                        View headerView = navigationView.getHeaderView(0);
-                        TextView navUserEmail = (TextView) headerView.findViewById(R.id.user_email);
-                        navUserEmail.setText(email);
-
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Getting Post failed, log a message
-                        Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                        // ...
-                    }
-                });*/
+        if (user == null) {
+            Intent intent = new Intent(this, GoogleAuthActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -89,6 +61,10 @@ public class NetIntegrationActivity extends AppCompatActivity {
                     } else {
                         TextView navUserEmail = (TextView) headerView.findViewById(R.id.user_email);
                         navUserEmail.setText("Адрес электронной почты");
+                    }
+                    if (user.getPhotoUrl() != null) {
+                        ImageView navUserPhoto = (ImageView) headerView.findViewById(R.id.user_icon);
+                        navUserPhoto.setImageURI(photo);
                     }
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());

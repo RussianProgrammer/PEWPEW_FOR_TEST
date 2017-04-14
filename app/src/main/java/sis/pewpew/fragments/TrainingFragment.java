@@ -17,6 +17,7 @@ public class TrainingFragment extends Fragment {
         ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.training_fragment_name));
         return inflater.inflate(R.layout.fragment_training, container, false);
     }
+
     @Override
     public void onDetach() {
         super.onDetach();

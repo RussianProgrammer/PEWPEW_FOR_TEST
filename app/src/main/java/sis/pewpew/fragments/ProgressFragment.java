@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import sis.pewpew.MainActivity;
 import sis.pewpew.R;
 
-
 public class ProgressFragment extends Fragment {
 
     @Override

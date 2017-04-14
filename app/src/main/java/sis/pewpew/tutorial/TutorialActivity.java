@@ -26,7 +26,7 @@ public class TutorialActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tutorial);
 
         SharedPreferences preferences = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
-        if(preferences.getBoolean("activity_executed", false)){
+        if (preferences.getBoolean("activity_executed", false)) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -75,13 +75,19 @@ public class TutorialActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            switch (position){
-                case 0: return TutorialFragment1.newInstance();
-                case 1: return TutorialFragment2.newInstance();
-                case 2: return TutorialFragment3.newInstance();
-                case 3: return TutorialFragment4.newInstance();
-                case 4: return TutorialFragment5.newInstance();
-                default: return PlaceholderFragment.newInstance(position + 1);
+            switch (position) {
+                case 0:
+                    return TutorialFragment1.newInstance();
+                case 1:
+                    return TutorialFragment2.newInstance();
+                case 2:
+                    return TutorialFragment3.newInstance();
+                case 3:
+                    return TutorialFragment4.newInstance();
+                case 4:
+                    return TutorialFragment5.newInstance();
+                default:
+                    return PlaceholderFragment.newInstance(position + 1);
             }
         }
 
