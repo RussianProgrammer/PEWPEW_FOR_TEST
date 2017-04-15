@@ -6,7 +6,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -31,18 +30,14 @@ import static android.content.Context.LOCATION_SERVICE;
 public class MapFragment extends Fragment {
 
     private MapView mMapView;
-    private GoogleMap mMap;
-    private final int PERMISSION_REQUEST_CODE = 5;
-    private LocationManager mLocationManager;
     private LatLng mCurrentLocationLatLng;
     private LatLng mDefaultLocation = new LatLng(55.755826, 37.6173);
-    private Location mLastKnownLocation;
     private MainActivity mainActivity = new MainActivity();
 
 
     LocationListener mLocationListener = new LocationListener() {
         @Override
-        public void onLocationChanged(final Location location) {
+        public void onLocationChanged(Location location) {
             mCurrentLocationLatLng = new LatLng(location.getLatitude(), location.getLongitude());
         }
 
@@ -67,43 +62,24 @@ public class MapFragment extends Fragment {
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mainActivity.mLocationPermissionGranted = true;
-
         } else {
+            int PERMISSION_REQUEST_CODE = 5;
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSION_REQUEST_CODE);
         }
 
         if (mainActivity.mLocationPermissionGranted) {
-            mLocationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
-            mLastKnownLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
+            LocationManager mLocationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+            Location mLastKnownLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
                     0, mLocationListener);
-            if (mCurrentLocationLatLng == null) {
-                mCurrentLocationLatLng = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[],
-                                           @NonNull int[] grantResults) {
-        mainActivity.mLocationPermissionGranted = false;
-        switch (requestCode) {
-            case PERMISSION_REQUEST_CODE: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getActivity(), "RESULT WORKS", Toast.LENGTH_SHORT).show();
-                    mMap.addMarker(new MarkerOptions().position(mCurrentLocationLatLng).title("Your location").snippet("Finally"));
-                    CameraPosition cameraPosition = new CameraPosition.Builder().target(mDefaultLocation).zoom(12).build();
-                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    mainActivity.mLocationPermissionGranted = true;
-                } else {
-                    Toast.makeText(getActivity(),
-                            "Невозможно определить местоположение. Пожалуйста, предоставьте приложению доступ  к вашей геопозиции",
-                            Toast.LENGTH_SHORT).show();
+            try {
+                if (mCurrentLocationLatLng == null) {
+                    mCurrentLocationLatLng = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
                 }
+            } catch (NullPointerException e) {
+                mCurrentLocationLatLng = mDefaultLocation;
             }
         }
     }
@@ -133,7 +109,7 @@ public class MapFragment extends Fragment {
                     mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 } else {
                     Toast.makeText(getActivity(),
-                            "Невозможно определить местоположение. Пожалуйста, предоставьте приложению доступ  к вашей геопозиции",
+                            "Невозможно определить местоположение. Пожалуйста, предоставьте приложению доступ к вашей геопозиции",
                             Toast.LENGTH_SHORT).show();
                 }
             }
