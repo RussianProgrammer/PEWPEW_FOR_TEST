@@ -38,6 +38,7 @@ public class NetIntegrationActivity extends AppCompatActivity {
                     String username = user.getDisplayName();
                     String email = user.getEmail();
 
+                    ///////
                     NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
                     View headerView = navigationView.getHeaderView(0);
                     if (user.getDisplayName() != null) {
