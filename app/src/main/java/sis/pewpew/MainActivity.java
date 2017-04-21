@@ -1,5 +1,6 @@
 package sis.pewpew;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import sis.pewpew.connections.GoogleAuthActivity;
 import sis.pewpew.fragments.AboutFragment;
 import sis.pewpew.fragments.AchievementsFragment;
 import sis.pewpew.fragments.EventsFragment;
@@ -44,12 +49,20 @@ public class MainActivity extends NetIntegrationActivity
     TrainingFragment trainingFragment;
     AboutFragment aboutFragment;
 
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (user == null) {
+            Intent intent = new Intent(MainActivity.this, GoogleAuthActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         if (ContextCompat.checkSelfPermission(MainActivity.this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION)

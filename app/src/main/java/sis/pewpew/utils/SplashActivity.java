@@ -1,8 +1,9 @@
 package sis.pewpew.utils;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
 import sis.pewpew.R;
 import sis.pewpew.tutorial.TutorialActivity;
 

@@ -18,7 +18,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -100,13 +99,25 @@ public class MapFragment extends Fragment {
             e.printStackTrace();
         }
 
+
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap mMap) {
                 if (mainActivity.mLocationPermissionGranted) {
                     mMap.addMarker(new MarkerOptions().position(mCurrentLocationLatLng).title("Вы находитесь здесь"));
-                    CameraPosition cameraPosition = new CameraPosition.Builder().target(mDefaultLocation).zoom(12).build();
-                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                    mMap.setMinZoomPreference(10.0f);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 12));
+                    MarkerOptions markerOptions = new MarkerOptions();
+
+                    LatLng[] point_new = new LatLng[3];
+                    point_new[0] = new LatLng(55.756459, 37.620181);
+                    point_new[1] = new LatLng(55.757485, 37.606491);
+                    point_new[2] = new LatLng(55.744733, 37.619666);
+                    for (LatLng aPoint_new : point_new) {
+                        markerOptions.position(aPoint_new);
+                        mMap.addMarker(markerOptions);
+                    }
+
                 } else {
                     Toast.makeText(getActivity(),
                             "Невозможно определить местоположение. Пожалуйста, предоставьте приложению доступ к вашей геопозиции",
